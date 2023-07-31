@@ -59,6 +59,10 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+
+    //non nextAuth
+    rooms    UserRoom[]
+    messages Message[]
 }
 
 model VerificationToken {
@@ -67,4 +71,46 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Room {
+    id        String     @id @default(cuid())
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+    name      String     @unique
+    messages  Message[]
+    members   UserRoom[]
+}
+
+model UserRoom {
+    createdAt DateTime     @default(now())
+    updatedAt DateTime     @updatedAt
+    user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    room      Room         @relation(fields: [roomId], references: [id], onDelete: Cascade)
+    roomId    String
+    role      RoomUserRole
+
+    @@id([userId, roomId])
+    @@index([userId])
+    @@index([roomId])
+}
+
+model Message {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    content   String   @db.Text //? 
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+    roomId    String
+
+    @@index([userId])
+    @@index([roomId])
+}
+
+enum RoomUserRole {
+    member
+    admin
 }
