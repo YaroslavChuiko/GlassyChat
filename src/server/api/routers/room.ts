@@ -148,7 +148,7 @@ export const roomRouter = createTRPCRouter({
           roomId: id,
         },
         include: {
-          user: true,
+          author: true,
         },
       });
 
@@ -156,20 +156,28 @@ export const roomRouter = createTRPCRouter({
     }),
 
   sendMessage: protectedProcedure
-    .input(z.object({ id: z.string(), content: z.string().min(1) }))
+    .input(z.object({ roomId: z.string(), content: z.string().min(1) }))
     .mutation(async ({ input, ctx }) => {
-      const { id, content } = input;
+      const { roomId, content } = input;
 
-      await ensureRoomExists(ctx.prisma, id);
+      await ensureRoomExists(ctx.prisma, roomId);
 
       const message = await ctx.prisma.message.create({
         data: {
           content,
-          roomId: id,
-          userId: ctx.session.user.id,
+          room: {
+            connect: {
+              id: roomId,
+            },
+          },
+          author: {
+            connect: {
+              id: ctx.session.user.id,
+            },
+          },
         },
         include: {
-          user: true,
+          author: true,
         },
       });
 

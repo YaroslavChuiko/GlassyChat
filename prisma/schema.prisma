@@ -77,7 +77,7 @@ model Room {
     id        String     @id @default(cuid())
     createdAt DateTime   @default(now())
     updatedAt DateTime   @updatedAt
-    name      String     @unique
+    name      String     @unique // pusher chanel name max 164
     messages  Message[]
     members   UserRoom[]
 }
@@ -101,12 +101,12 @@ model Message {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     content   String   @db.Text //? 
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId    String
+    author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    authorId  String
     room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
     roomId    String
 
-    @@index([userId])
+    @@index([authorId])
     @@index([roomId])
 }
 
