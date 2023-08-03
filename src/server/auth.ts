@@ -9,6 +9,7 @@ import DiscordProvider from "next-auth/providers/discord";
 import GithubProvider from "next-auth/providers/github";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
+import { appRouter } from "./api/root";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -45,6 +46,27 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
       },
     }),
+  },
+  events: {
+    signIn: async ({ user, isNewUser }) => {
+      if (isNewUser) {
+        const session = {
+          user,
+          expires: "",
+        };
+        const authorizedCaller = appRouter.createCaller({ prisma, session });
+
+        const mainRoom = await prisma.room.findFirst({
+          where: {
+            type: "global",
+          },
+        });
+
+        await authorizedCaller.room.join({
+          roomId: mainRoom!.id,
+        });
+      }
+    },
   },
   adapter: PrismaAdapter(prisma),
   providers: [
