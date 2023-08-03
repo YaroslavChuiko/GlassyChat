@@ -20,6 +20,22 @@ const ensureRoomExists = async (
   }
 };
 
+const ensureUserNotJoinedAlready = async (
+  prisma: PrismaClient,
+  roomId: string,
+  userId: string
+): Promise<void> => {
+  const userRoom = await prisma.userRoom.findUnique({
+    where: { userId_roomId: { userId, roomId } },
+  });
+  if (userRoom) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "You have already joined this room!",
+    });
+  }
+};
+
 const ensureUserIsAdmin = async (
   prisma: PrismaClient,
   userId: string,
@@ -69,7 +85,7 @@ export const roomRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        name: z.string(),
+        name: z.string(), // room type: "public" | "private";
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -78,6 +94,7 @@ export const roomRouter = createTRPCRouter({
       const room = await ctx.prisma.room.create({
         data: {
           name: input.name,
+          type: "public",
           members: {
             create: {
               user: {
@@ -134,6 +151,35 @@ export const roomRouter = createTRPCRouter({
       });
 
       return room;
+    }),
+
+  join: protectedProcedure
+    .input(z.object({ roomId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const { roomId } = input;
+
+      await Promise.all([
+        ensureRoomExists(ctx.prisma, roomId),
+        ensureUserNotJoinedAlready(ctx.prisma, roomId, ctx.session.user.id),
+      ]);
+
+      const userRoom = await ctx.prisma.userRoom.create({
+        data: {
+          user: {
+            connect: {
+              id: ctx.session.user.id,
+            },
+          },
+          room: {
+            connect: {
+              id: roomId,
+            },
+          },
+          role: "member",
+        },
+      });
+
+      return userRoom;
     }),
 
   getMessages: protectedProcedure
