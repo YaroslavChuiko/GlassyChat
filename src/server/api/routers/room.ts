@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { type PrismaClient } from "@prisma/client";
+import { pusher } from "~/server/pusher";
 
 const ensureRoomExists = async (
   prisma: PrismaClient,
@@ -179,6 +180,12 @@ export const roomRouter = createTRPCRouter({
         },
       });
 
+      pusher
+        .trigger(`room-${roomId}`, "new-member", ctx.session.user)
+        .catch((e) => {
+          throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", cause: e });
+        });
+
       return userRoom;
     }),
 
@@ -223,8 +230,18 @@ export const roomRouter = createTRPCRouter({
           },
         },
         include: {
-          author: true,
+          author: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
         },
+      });
+
+      pusher.trigger(`room-${roomId}`, "new-message", message).catch((e) => {
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", cause: e });
       });
 
       return message;

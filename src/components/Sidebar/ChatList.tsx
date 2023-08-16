@@ -1,11 +1,11 @@
 import { useSession } from "next-auth/react";
-import React from "react";
 import { api } from "~/utils/api";
 import ChatListItem from "./ChatListItem";
 
 export default function ChatList() {
   const { data: sessionData } = useSession();
 
+  //TODO: mb move this call to getServerSideProps and save in sate manager like Zustand
   const userRooms = api.user.getRooms.useQuery({
     id: sessionData?.user?.id ?? "",
   });

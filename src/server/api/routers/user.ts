@@ -2,8 +2,9 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
-  getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.user.findMany();
+  getAll: protectedProcedure.query(async ({ ctx }) => {
+    const users = await ctx.prisma.user.findMany();
+    return users;
   }),
 
   getOne: protectedProcedure
@@ -30,9 +31,22 @@ export const userRouter = createTRPCRouter({
           rooms: {
             select: {
               room: {
-                select: {
-                  id: true,
-                  name: true,
+                include: {
+                  messages: {
+                    include: {
+                      author: {
+                        select: {
+                          id: true,
+                          name: true,
+                          image: true,
+                        },
+                      },
+                    },
+                    orderBy: {
+                      createdAt: "desc",
+                    },
+                    take: 1,
+                  },
                 },
               },
               role: true,
@@ -45,9 +59,13 @@ export const userRouter = createTRPCRouter({
         return [];
       }
 
-      return userRooms.rooms.map((room) => ({
-        ...room.room,
-        role: room.role,
-      }));
+      return userRooms.rooms.map((room) => {
+        const { messages, ...rest } = room.room;
+        return {
+          ...rest,
+          lastMessage: messages[0],
+          userRole: room.role,
+        };
+      });
     }),
 });
