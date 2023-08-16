@@ -1,14 +1,11 @@
-import { signIn, signOut, useSession } from "next-auth/react";
-import React from "react";
+import { signOut } from "next-auth/react";
 
 export default function SidebarHeader() {
-  const { data: sessionData } = useSession();
-
   return (
     <div className="mb-4 flex w-full">
       <button
         className="mr-3 h-10 w-10 rounded-lg bg-black bg-opacity-5"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
+        onClick={() => void signOut()}
       >
         menu
       </button>
