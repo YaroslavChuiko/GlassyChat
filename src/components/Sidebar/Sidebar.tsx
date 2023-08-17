@@ -4,7 +4,7 @@ import ChatList from "./ChatList";
 
 export default function Sidebar() {
   return (
-    <div className="w-1/4 rounded-3xl bg-white bg-opacity-60 px-5 py-6">
+    <div className="w-1/4 rounded-3xl bg-white bg-opacity-60 px-5 py-6 shadow-xl">
       <SidebarHeader />
       <ChatList />
     </div>

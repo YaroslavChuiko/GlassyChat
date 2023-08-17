@@ -8,7 +8,7 @@ type Message = RouterOutputs["room"]["sendMessage"]; // Message | undefined = Ro
 
 export default function ChatListItem({ id, name, lastMessage }: Room) {
   const pusher = usePusher();
-  const [info, setInfo] = useState<Room["lastMessage"]>(lastMessage);
+  const [lastInfo, setLastInfo] = useState<Room["lastMessage"]>(lastMessage);
 
   useEffect(() => {
     if (!pusher) return;
@@ -16,7 +16,7 @@ export default function ChatListItem({ id, name, lastMessage }: Room) {
     const channel = pusher.subscribe(`room-${id}`);
 
     channel.bind("new-message", (data: Message) => {
-      setInfo(data);
+      setLastInfo(data);
     });
 
     return () => {
@@ -34,16 +34,18 @@ export default function ChatListItem({ id, name, lastMessage }: Room) {
       className="flex cursor-pointer items-center rounded-lg bg-black bg-opacity-5 px-3 py-3"
       onClick={() => handleSendMessage()}
     >
-      <div className="mr-3 h-[50px] w-[50px] rounded-full bg-white">A</div>
+      <div className=" mr-3 flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-700 text-xl text-white">
+        MR
+      </div>
       <div className="flex-grow">
-        <div className="mb-1 flex items-center justify-between">
+        <div className=" flex items-center justify-between">
           <div className="text-base font-black text-black">{name}</div>
           <div className="text-xs text-gray-500">
-            {info ? moment(info.createdAt).fromNow() : "..."}
+            {lastInfo ? moment(lastInfo.createdAt).fromNow() : "..."}
           </div>
         </div>
-        <div className="text-xs text-gray-500">
-          {info ? info.content : "..."}
+        <div className="text-sm text-gray-500">
+          {lastInfo ? lastInfo.content : "..."}
         </div>
       </div>
     </div>
