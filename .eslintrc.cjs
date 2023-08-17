@@ -24,6 +24,7 @@ const config = {
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unsafe-return": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
   },
 };
 

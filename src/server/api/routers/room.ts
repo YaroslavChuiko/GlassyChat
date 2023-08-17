@@ -1,8 +1,9 @@
-import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { TRPCError } from "@trpc/server";
 import { type PrismaClient } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 import { pusher } from "~/server/pusher";
+import { getRandomRoomColor } from "~/utils/getRandomColor";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const ensureRoomExists = async (
   prisma: PrismaClient,
@@ -53,7 +54,7 @@ const ensureUserIsAdmin = async (
     });
   }
 
-  if (userRoom.role !== "admin") {
+  if (userRoom.role !== "ADMIN") {
     throw new TRPCError({
       code: "FORBIDDEN",
       message: "This action is only available for admins!",
@@ -95,7 +96,8 @@ export const roomRouter = createTRPCRouter({
       const room = await ctx.prisma.room.create({
         data: {
           name: input.name,
-          type: "public",
+          type: "PUBLIC",
+          color: getRandomRoomColor(),
           members: {
             create: {
               user: {
@@ -103,7 +105,7 @@ export const roomRouter = createTRPCRouter({
                   id: ctx.session.user.id,
                 },
               },
-              role: "admin",
+              role: "ADMIN",
             },
           },
         },
@@ -176,7 +178,7 @@ export const roomRouter = createTRPCRouter({
               id: roomId,
             },
           },
-          role: "member",
+          role: "MEMBER",
         },
       });
 
@@ -235,6 +237,7 @@ export const roomRouter = createTRPCRouter({
               id: true,
               name: true,
               image: true,
+              color: true,
             },
           },
         },

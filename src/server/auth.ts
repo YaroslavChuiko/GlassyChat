@@ -1,14 +1,18 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { type UserColor } from "@prisma/client";
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
-  type NextAuthOptions,
   type DefaultSession,
+  type NextAuthOptions,
 } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
-import GithubProvider from "next-auth/providers/github";
+import DiscordProvider, {
+  type DiscordProfile,
+} from "next-auth/providers/discord";
+import GithubProvider, { type GithubProfile } from "next-auth/providers/github";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
+import { getRandomUserColor } from "~/utils/getRandomColor";
 import { appRouter } from "./api/root";
 
 /**
@@ -21,15 +25,16 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
+      color: UserColor;
       // ...other properties
       // role: UserRole;
     };
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    color: UserColor;
+    // ...other properties
+  }
 }
 
 /**
@@ -44,6 +49,7 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
+        color: user.color,
       },
     }),
   },
@@ -58,7 +64,7 @@ export const authOptions: NextAuthOptions = {
 
         const mainRoom = await prisma.room.findFirst({
           where: {
-            type: "global",
+            type: "GLOBAL",
           },
         });
 
@@ -73,10 +79,28 @@ export const authOptions: NextAuthOptions = {
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
+      profile(profile: DiscordProfile) {
+        return {
+          id: profile.id.toString(),
+          name: profile.username,
+          email: profile.email,
+          image: profile.avatar,
+          color: getRandomUserColor(),
+        };
+      },
     }),
     GithubProvider({
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
+      profile(profile: GithubProfile) {
+        return {
+          id: profile.id.toString(),
+          name: profile.name,
+          email: profile.email,
+          image: profile.avatar_url,
+          color: getRandomUserColor(),
+        };
+      },
     }),
     /**
      * ...add more providers here.

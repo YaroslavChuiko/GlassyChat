@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { PrismaClient, type UserColor } from "@prisma/client";
 import { GLOBAL_ROOM_NAME } from "../src/const/const";
 
 const prisma = new PrismaClient();
@@ -10,6 +10,8 @@ async function main() {
     name: process.env.SUPER_ADMIN_NAME!,
     email: process.env.SUPER_ADMIN_EMAIL!,
     emailVerified: new Date(),
+    // @ts-ignore
+    color: "USER_COLOR_1" as UserColor, //???? strange error
   });
 
   const account = await adapter.linkAccount({
@@ -22,7 +24,8 @@ async function main() {
   const room = await prisma.room.create({
     data: {
       name: GLOBAL_ROOM_NAME,
-      type: "global",
+      color: "ROOM_COLOR_1",
+      type: "GLOBAL",
       members: {
         create: {
           user: {
@@ -30,7 +33,7 @@ async function main() {
               id: superAdmin.id,
             },
           },
-          role: "admin",
+          role: "ADMIN",
         },
       },
     },
