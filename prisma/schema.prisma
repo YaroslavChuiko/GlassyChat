@@ -61,6 +61,7 @@ model User {
     sessions      Session[]
 
     //non nextAuth
+    color    UserColor
     rooms    UserRoom[]
     messages Message[]
 }
@@ -79,6 +80,7 @@ model Room {
     updatedAt DateTime   @updatedAt
     name      String     @unique // pusher chanel name max 164
     type      RoomType
+    color     RoomColor
     messages  Message[]
     members   UserRoom[]
 }
@@ -112,12 +114,28 @@ model Message {
 }
 
 enum RoomUserRole {
-    member
-    admin
+    MEMBER
+    ADMIN
 }
 
 enum RoomType {
-    public
-    private
-    global // global chat room for all users 
+    PUBLIC
+    PRIVATE
+    GLOBAL // global chat room for all users 
+}
+
+enum RoomColor {
+    ROOM_COLOR_1
+    ROOM_COLOR_2
+    ROOM_COLOR_3
+    ROOM_COLOR_4
+    ROOM_COLOR_5
+}
+
+enum UserColor {
+    USER_COLOR_1
+    USER_COLOR_2
+    USER_COLOR_3
+    USER_COLOR_4
+    USER_COLOR_5
 }
