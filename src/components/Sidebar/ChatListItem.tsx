@@ -2,11 +2,12 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { usePusher } from "~/hooks/usePusher";
 import { api, type RouterOutputs } from "~/utils/api";
+import Avatar from "../Avatar";
 
 type Room = RouterOutputs["user"]["getRooms"][number];
 type Message = RouterOutputs["room"]["sendMessage"]; // Message | undefined = Room["lastMessage"]
 
-export default function ChatListItem({ id, name, lastMessage }: Room) {
+export default function ChatListItem({ id, name, color, lastMessage }: Room) {
   const pusher = usePusher();
   const [lastInfo, setLastInfo] = useState<Room["lastMessage"]>(lastMessage);
 
@@ -34,9 +35,7 @@ export default function ChatListItem({ id, name, lastMessage }: Room) {
       className="flex cursor-pointer items-center rounded-lg bg-black bg-opacity-5 px-3 py-3"
       onClick={() => handleSendMessage()}
     >
-      <div className=" mr-3 flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-700 text-xl text-white">
-        MR
-      </div>
+      <Avatar name={name} color={color} size="lg" className="mr-3" />
       <div className="flex-grow">
         <div className=" flex items-center justify-between">
           <div className="text-base font-black text-black">{name}</div>
@@ -45,7 +44,7 @@ export default function ChatListItem({ id, name, lastMessage }: Room) {
           </div>
         </div>
         <div className="text-sm text-gray-500">
-          {lastInfo ? lastInfo.content : "..."}
+          {lastInfo?.author.name}: {lastInfo ? lastInfo.content : "..."}
         </div>
       </div>
     </div>
