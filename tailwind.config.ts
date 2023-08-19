@@ -5,5 +5,5 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("windy-radix-palette")],
 } satisfies Config;
