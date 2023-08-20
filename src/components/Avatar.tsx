@@ -21,25 +21,27 @@ export default function Avatar({
   className = "",
 }: Props) {
   return (
-    <AvatarRadix.Root
-      className={`${getSizeStyle(
-        size
-      )} ${className} bg-blackA3 inline-flex select-none items-center justify-center overflow-hidden rounded-full align-middle`}
-    >
-      <AvatarRadix.Image
-        className="h-full w-full rounded-[inherit] object-cover"
-        src={imgSrc}
-        alt={name}
-      />
-      <AvatarRadix.Fallback
-        className={`${getColorStyle(
-          color
-        )}  leading-1 flex h-full w-full items-center justify-center text-[20px] font-medium`}
-        delayMs={600}
+    <div className={className}>
+      <AvatarRadix.Root
+        className={`${getSizeStyle(
+          size
+        )} bg-blackA3 inline-flex select-none items-center justify-center overflow-hidden rounded-full align-middle`}
       >
-        {getAcronym(name)}
-      </AvatarRadix.Fallback>
-    </AvatarRadix.Root>
+        <AvatarRadix.Image
+          className="h-full w-full rounded-[inherit] object-cover"
+          src={imgSrc}
+          alt={name}
+        />
+        <AvatarRadix.Fallback
+          className={`${getColorStyle(
+            color
+          )}  leading-1 flex h-full w-full items-center justify-center text-[20px] font-medium`}
+          delayMs={600}
+        >
+          {getAcronym(name)}
+        </AvatarRadix.Fallback>
+      </AvatarRadix.Root>
+    </div>
   );
 }
 
