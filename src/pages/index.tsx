@@ -4,7 +4,7 @@ import { getServerAuthSession } from "~/server/auth";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen min-w-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 p-12">
+    <div className="flex min-h-screen min-w-full bg-gradient-to-br from-[#6366f1] to-[#d946ef] p-12">
       <Sidebar />
     </div>
   );
