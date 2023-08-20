@@ -32,18 +32,20 @@ export default function ChatListItem({ id, name, color, lastMessage }: Room) {
 
   return (
     <div
-      className="flex cursor-pointer items-center rounded-lg bg-graya-3 bg-opacity-5 px-3 py-3 transition hover:bg-graya-4 hover:shadow-sm"
+      className="flex w-full cursor-pointer items-center rounded-lg bg-graya-3 bg-opacity-5 px-3 py-3 transition hover:bg-graya-4 hover:shadow-sm"
       onClick={() => handleSendMessage()}
     >
       <Avatar name={name} color={color} size="lg" className="mr-3" />
-      <div className="flex-grow">
+      <div className="flex-1 overflow-hidden">
         <div className=" flex items-center justify-between">
-          <div className="text-base font-black text-gray-12">{name}</div>
+          <div className="flex-1 truncate text-base font-black text-gray-12">
+            {name}
+          </div>
           <div className="text-xs text-gray-11">
             {lastInfo ? moment(lastInfo.createdAt).fromNow() : "..."}
           </div>
         </div>
-        <div className="text-sm text-gray-11">
+        <div className="truncate text-sm text-gray-11">
           <span className="text-gray-12">{lastInfo?.author.name}</span>:{" "}
           {lastInfo ? lastInfo.content : "..."}
         </div>
