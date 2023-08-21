@@ -1,16 +1,11 @@
-import { signOut } from "next-auth/react";
+import DropdownMainMenu from "./DropdownMainMenu";
 
 export default function SidebarHeader() {
   return (
     <div className="mb-4 flex w-full">
-      <button
-        className="mr-3 h-10 w-10 rounded-lg bg-black bg-opacity-5"
-        onClick={() => void signOut()}
-      >
-        menu
-      </button>
+      <DropdownMainMenu className="mr-3" />
       <input
-        className="h-10 w-full rounded-lg bg-black bg-opacity-5"
+        className="h-10 flex-1 rounded-lg bg-black bg-opacity-5"
         type="text"
         placeholder="Search"
       />
