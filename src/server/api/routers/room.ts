@@ -210,6 +210,29 @@ export const roomRouter = createTRPCRouter({
       return messages;
     }),
 
+  getMembersCount: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const { id } = input;
+
+      await ensureRoomExists(ctx.prisma, id);
+
+      const membersCount = await ctx.prisma.room.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          _count: {
+            select: {
+              members: true,
+            },
+          },
+        },
+      });
+
+      return { count: membersCount?._count?.members ?? 0 };
+    }),
+
   sendMessage: protectedProcedure
     .input(z.object({ roomId: z.string(), content: z.string().min(1) }))
     .mutation(async ({ input, ctx }) => {
