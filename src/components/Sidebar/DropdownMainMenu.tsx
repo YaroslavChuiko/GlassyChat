@@ -13,6 +13,7 @@ import { useAppStore } from "~/store/store";
 import { ALL_COLOR_THEMES, isColorTheme } from "~/types/ColorTheme";
 import IconButton from "../IconButton";
 import { THEME_GRADIENTS } from "~/const/const";
+import { signOut } from "next-auth/react";
 
 type Props = {
   className?: string;
@@ -111,7 +112,10 @@ export default function DropdownMainMenu({ className }: Props) {
 
           <DropdownMenu.Separator className="m-[5px] h-[1px] bg-gray-9 transition-colors dark:bg-graydark-9" />
 
-          <DropdownMenu.Item className="my-[2px] flex h-[30px] cursor-pointer select-none items-center rounded-[5px] p-1 leading-none outline-none transition active:scale-[0.98] data-[disabled]:pointer-events-none data-[highlighted]:bg-graya-4 data-[disabled]:text-gray-11 dark:data-[highlighted]:bg-graydarka-4 dark:data-[disabled]:text-graydark-11">
+          <DropdownMenu.Item
+            className="my-[2px] flex h-[30px] cursor-pointer select-none items-center rounded-[5px] p-1 leading-none outline-none transition active:scale-[0.98] data-[disabled]:pointer-events-none data-[highlighted]:bg-graya-4 data-[disabled]:text-gray-11 dark:data-[highlighted]:bg-graydarka-4 dark:data-[disabled]:text-graydark-11"
+            onSelect={() => void signOut()}
+          >
             <ExitIcon height={20} width={20} className="ml-2 mr-5" />
             Log Out
           </DropdownMenu.Item>
