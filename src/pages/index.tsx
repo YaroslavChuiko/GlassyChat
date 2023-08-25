@@ -1,6 +1,7 @@
 import { type GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
-import Sidebar from "~/components/Sidebar/Sidebar";
+import Chat from "~/components/Chat";
+import Sidebar from "~/components/Sidebar";
 import { THEME_GRADIENTS } from "~/const/const";
 import { getServerAuthSession } from "~/server/auth";
 import { useAppStore } from "~/store/store";
@@ -19,7 +20,8 @@ export default function Home() {
         isClient && THEME_GRADIENTS[colorTheme]
       } flex min-h-screen min-w-full p-12`}
     >
-      <Sidebar />
+      <Sidebar className="mr-11" />
+      <Chat className="flex-1" />
     </div>
   );
 }

@@ -1,15 +1,21 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { usePusher } from "~/hooks/usePusher";
-import { api, type RouterOutputs } from "~/utils/api";
+import { useAppStore } from "~/store/store";
+import { type RouterOutputs } from "~/utils/api";
 import Avatar from "../Avatar";
+import { type Chat } from "~/types/Chat";
 
-type Room = RouterOutputs["user"]["getRooms"][number];
 type Message = RouterOutputs["room"]["sendMessage"]; // Message | undefined = Room["lastMessage"]
+type Props = {
+  chatInfo: Chat;
+};
 
-export default function ChatListItem({ id, name, color, lastMessage }: Room) {
+export default function ChatListItem({ chatInfo }: Props) {
+  const { id, name, color, lastMessage } = chatInfo;
   const pusher = usePusher();
-  const [lastInfo, setLastInfo] = useState<Room["lastMessage"]>(lastMessage);
+  const [lastInfo, setLastInfo] = useState<Chat["lastMessage"]>(lastMessage);
+  const { selectedChat, setSelectedChat } = useAppStore();
 
   useEffect(() => {
     if (!pusher) return;
@@ -25,27 +31,35 @@ export default function ChatListItem({ id, name, color, lastMessage }: Room) {
     };
   }, [pusher, id]);
 
-  const sendMessage = api.room.sendMessage.useMutation();
-  const handleSendMessage = () => {
-    sendMessage.mutate({ roomId: id, content: "new message" });
+  // const sendMessage = api.room.sendMessage.useMutation();
+  // const handleSendMessage = () => {
+  //   sendMessage.mutate({ roomId: id, content: "new message" });
+  // };
+
+  const handleClick = () => {
+    setSelectedChat(chatInfo);
   };
 
   return (
     <div
-      className="flex w-full cursor-pointer items-center rounded-lg bg-graya-3 bg-opacity-5 px-3 py-3 transition hover:bg-graya-4 active:scale-[0.99] dark:bg-graydarka-3 dark:hover:bg-graydarka-4"
-      onClick={() => handleSendMessage()}
+      className={`${
+        selectedChat?.id === id
+          ? "bg-graya-6 dark:bg-graydarka-6"
+          : "bg-graya-3 dark:bg-graydarka-3"
+      } flex w-full cursor-pointer items-center rounded-lg px-3 py-3 transition hover:bg-graya-4 active:scale-[0.99] dark:hover:bg-graydarka-4`}
+      onClick={handleClick}
     >
       <Avatar name={name} color={color} size="lg" className="mr-3" />
       <div className="flex-1 overflow-hidden">
         <div className=" flex items-center justify-between">
-          <div className="flex-1 truncate text-base font-semibold text-gray-12 dark:text-graydark-12">
+          <div className="flex-1 truncate text-base font-semibold text-gray-12 transition-colors dark:text-graydark-12">
             {name}
           </div>
-          <div className="text-xs text-gray-11 dark:text-graydark-11">
+          <div className="text-xs text-gray-11 transition-colors dark:text-graydark-11">
             {lastInfo ? moment(lastInfo.createdAt).fromNow() : "..."}
           </div>
         </div>
-        <div className="truncate text-sm text-gray-11 dark:text-graydark-11">
+        <div className="truncate text-sm text-gray-11 transition-colors dark:text-graydark-11">
           <span className="text-gray-12 dark:text-graydark-12">
             {lastInfo?.author.name}
           </span>

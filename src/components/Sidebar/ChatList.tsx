@@ -14,7 +14,7 @@ export default function ChatList() {
     <div className="h-fit">
       {userRooms.isSuccess &&
         userRooms.data.map((room) => {
-          return <ChatListItem key={room.id} {...room} />;
+          return <ChatListItem key={room.id} chatInfo={room} />;
         })}
     </div>
   );
