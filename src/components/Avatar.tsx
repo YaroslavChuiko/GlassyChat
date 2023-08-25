@@ -36,7 +36,6 @@ export default function Avatar({
           className={`${getColorStyle(
             color
           )} leading-1 flex h-full w-full items-center justify-center text-[20px] font-medium`}
-          delayMs={600}
         >
           {getAcronym(name)}
         </AvatarRadix.Fallback>
