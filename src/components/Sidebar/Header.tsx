@@ -1,6 +1,6 @@
 import DropdownMainMenu from "./DropdownMainMenu";
 
-export default function SidebarHeader() {
+export default function Header() {
   return (
     <div className="mb-4 flex w-full">
       <DropdownMainMenu className="mr-3" />
