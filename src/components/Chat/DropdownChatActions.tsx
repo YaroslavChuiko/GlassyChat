@@ -14,7 +14,7 @@ type Props = {
   className?: string;
 };
 
-export default function ChatActionsDropdown({
+export default function DropdownChatActions({
   userRole,
   chatType,
   className,
