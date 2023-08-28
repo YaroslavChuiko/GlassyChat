@@ -10,10 +10,11 @@ import {
 } from "@radix-ui/react-icons";
 import * as Switch from "@radix-ui/react-switch";
 import { useAppStore } from "~/store/store";
-import { ALL_COLOR_THEMES, isColorTheme } from "~/types/ColorTheme";
+import { ALL_COLOR_THEMES } from "~/types/ColorTheme";
 import IconButton from "../IconButton";
 import { THEME_GRADIENTS } from "~/const/const";
 import { signOut } from "next-auth/react";
+import { isColorTheme } from "~/utils/checkType";
 
 type Props = {
   className?: string;

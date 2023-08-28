@@ -18,7 +18,7 @@ export default function Home() {
     <div
       className={`${
         isClient && THEME_GRADIENTS[colorTheme]
-      } flex min-h-screen min-w-full p-12`}
+      } flex max-h-screen min-h-screen min-w-full p-12`}
     >
       <Sidebar className="mr-11" />
       <Chat className="flex-1" />
