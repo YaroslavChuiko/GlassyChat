@@ -1,6 +1,6 @@
-import React from "react";
-import * as AvatarRadix from "@radix-ui/react-avatar";
 import { type RoomColor, type UserColor } from "@prisma/client";
+import * as AvatarRadix from "@radix-ui/react-avatar";
+import { geAvatarColor } from "~/utils/getColor";
 
 type Size = "sm" | "md" | "lg";
 type Color = RoomColor | UserColor;
@@ -33,9 +33,9 @@ export default function Avatar({
           alt={name}
         />
         <AvatarRadix.Fallback
-          className={`${getColorStyle(
+          className={`${geAvatarColor(
             color
-          )} leading-1 flex h-full w-full items-center justify-center text-[20px] font-medium`}
+          )} leading-1 flex h-full w-full items-center justify-center  font-medium`}
         >
           {getAcronym(name)}
         </AvatarRadix.Fallback>
@@ -47,35 +47,13 @@ export default function Avatar({
 const getSizeStyle = (size: Size) => {
   switch (size) {
     case "sm":
-      return "h-[30px] w-[30px]";
+      return "h-[30px] w-[30px] text-[14px]";
     case "md":
-      return "h-[40px] w-[40px]";
+      return "h-[40px] w-[40px] text-[18px]";
     case "lg":
-      return "h-[50px] w-[50px]";
+      return "h-[50px] w-[50px] text-[20px]";
     default:
-      return "h-[40px] w-[40px]";
-  }
-};
-
-const getColorStyle = (color: Color) => {
-  switch (color) {
-    case "ROOM_COLOR_1":
-    case "USER_COLOR_1":
-      return "bg-red-9 text-reddark-12";
-    case "ROOM_COLOR_2":
-    case "USER_COLOR_2":
-      return "bg-purple-9 text-purpledark-12";
-    case "ROOM_COLOR_3":
-    case "USER_COLOR_3":
-      return "bg-cyan-9 text-cyandark-12";
-    case "ROOM_COLOR_4":
-    case "USER_COLOR_4":
-      return "bg-green-9 text-greendark-12";
-    case "ROOM_COLOR_5":
-    case "USER_COLOR_5":
-      return "bg-orange-9 text-orangedark-12";
-    default:
-      return "bg-purple-9 text-purpledark-12";
+      return "h-[40px] w-[40px] text-[20px]";
   }
 };
 
