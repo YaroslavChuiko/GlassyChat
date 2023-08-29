@@ -1,17 +1,14 @@
 import { type Config } from "tailwindcss";
-// const { blackA, mauve, violet } = require('@radix-ui/colors');
 
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  mode: "jit",
   darkMode: "class",
   theme: {
     extend: {
       colors: {
         white: "#fff",
         black: "#000",
-        // ...blackA,
-        // ...mauve,
-        // ...violet,
       },
       keyframes: {
         slideDownAndFade: {

@@ -1,4 +1,4 @@
-import { type UserColor, type RoomColor } from "@prisma/client";
+import type { RoomColor, UserColor } from "@prisma/client";
 import { type ColorTheme } from "~/types/ColorTheme";
 
 export const GLOBAL_ROOM_NAME = "Main room";
@@ -25,18 +25,26 @@ export const THEME_GRADIENTS: Record<ColorTheme, string> = {
   yellow: "bg-gradient-to-br from-[#FCD34D] to-[#F97316]",
 } as const;
 
-export const ROOM_COLORS: Record<RoomColor, string> = {
-  ROOM_COLOR_1: "red",
-  ROOM_COLOR_2: "purple",
-  ROOM_COLOR_3: "cyan",
-  ROOM_COLOR_4: "green",
-  ROOM_COLOR_5: "orange",
+export const ROOM_AVATAR_COLORS: Record<RoomColor, string> = {
+  ROOM_COLOR_1: `bg-red-9 text-reddark-12`,
+  ROOM_COLOR_2: `bg-purple-9 text-purpledark-12`,
+  ROOM_COLOR_3: `bg-cyan-9 text-cyandark-12`,
+  ROOM_COLOR_4: `bg-green-9 text-greendark-12`,
+  ROOM_COLOR_5: `bg-orange-9 text-orangedark-12`,
 } as const;
 
-export const USER_COLORS: Record<UserColor, string> = {
-  USER_COLOR_1: "blue",
-  USER_COLOR_2: "purple",
-  USER_COLOR_3: "cyan",
-  USER_COLOR_4: "green",
-  USER_COLOR_5: "orange",
+export const USER_AVATAR_COLORS: Record<UserColor, string> = {
+  USER_COLOR_1: `bg-blue-9 text-bluedark-12`,
+  USER_COLOR_2: `bg-purple-9 text-purpledark-12`,
+  USER_COLOR_3: `bg-cyan-9 text-cyandark-12`,
+  USER_COLOR_4: `bg-green-9 text-greendark-12`,
+  USER_COLOR_5: `bg-orange-9 text-orangedark-12`,
+} as const;
+
+export const USER_NAME_COLORS: Record<UserColor, string> = {
+  USER_COLOR_1: `text-blue-11`,
+  USER_COLOR_2: `text-purple-11`,
+  USER_COLOR_3: `text-cyan-11`,
+  USER_COLOR_4: `text-green-11`,
+  USER_COLOR_5: `text-orange-11`,
 } as const;
