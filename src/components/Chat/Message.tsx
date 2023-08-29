@@ -1,6 +1,6 @@
 import moment from "moment";
+import { USER_NAME_COLORS } from "~/const/const";
 import { type RouterOutputs } from "~/utils/api";
-import { getUserNameColor } from "~/utils/getColor";
 import Avatar from "../Avatar";
 
 type Message = RouterOutputs["room"]["getMessages"][number];
@@ -28,28 +28,50 @@ export default function Message({
   };
 
   return (
-    <div className="flex w-fit items-end py-[5px]">
-      <Avatar
-        className="mr-[10px]"
-        color={author.color}
-        size="md"
-        name={author.name ?? ""}
-        imgSrc={author.image ?? ""}
-      />
-      <div className="flex-1 rounded-[10px] bg-graya-3 px-[10px] py-[6px]">
-        <div
-          className={`${getUserNameColor(author.color)} text-sm font-semibold`}
-        >
-          {author.name}
-        </div>
-        <div className="inline-flex content-between items-end text-base text-gray-12">
-          {content}
-          <span
-            className="ml-3 text-xs text-gray-11"
-            title={moment(createdAt).format("LLLL")}
+    <div
+      className={`flex w-full ${
+        orientation === "right" ? "justify-end" : "justify-start"
+      }`}
+    >
+      <div
+        className={`flex w-fit max-w-[75%] items-end py-[5px] ${
+          orientation === "right" ? "flex-row-reverse" : "flex-row"
+        }`}
+      >
+        <Avatar
+          className={orientation === "right" ? "ml-[10px]" : "mr-[10px]"}
+          color={author.color}
+          size="md"
+          name={author.name ?? ""}
+          imgSrc={author.image ?? ""}
+        />
+        <div className="flex-1 rounded-[10px] bg-graya-3 px-[10px] py-[6px]">
+          <div
+            className={`${
+              USER_NAME_COLORS[author.color]
+            } flex items-end text-sm font-semibold ${
+              orientation === "right"
+                ? "flex-row-reverse text-right"
+                : "flex-row text-left"
+            }`}
           >
-            {formatDate(createdAt)}
-          </span>
+            {author.name}
+            <span
+              className={`${
+                orientation === "right" ? "mr-3" : "ml-3"
+              } text-xs text-gray-11`}
+              title={moment(createdAt).format("LLLL")}
+            >
+              {formatDate(createdAt)}
+            </span>
+          </div>
+          <div
+            className={`${
+              orientation === "right" ? "justify-end" : "justify-start"
+            } flex w-full text-base leading-tight text-gray-12`}
+          >
+            {content}
+          </div>
         </div>
       </div>
     </div>
