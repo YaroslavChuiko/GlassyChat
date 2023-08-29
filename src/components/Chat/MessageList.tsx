@@ -2,12 +2,14 @@ import React from "react";
 import { api } from "~/utils/api";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import Message from "./Message";
+import { useSession } from "next-auth/react";
 
 type Props = {
   chatId: string;
 };
 
 export default function MessageList({ chatId }: Props) {
+  const session = useSession();
   const { data, isLoading, isSuccess } = api.room.getMessages.useQuery({
     id: chatId,
   });
@@ -30,11 +32,13 @@ export default function MessageList({ chatId }: Props) {
       <ScrollArea.Viewport className="h-full w-full rounded">
         <div className="mx-auto w-3/4">
           {data.map((message) => {
+            const orientation =
+              session.data?.user?.id === message.author.id ? "right" : "left";
             return (
               <Message
                 key={message.id}
                 {...message}
-                orientation="left"
+                orientation={orientation}
               ></Message>
             );
           })}
