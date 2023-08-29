@@ -2,6 +2,7 @@ import React, { type ComponentProps } from "react";
 import Header from "./Header";
 import { useAppStore } from "~/store/store";
 import MessageList from "./MessageList";
+import Footer from "./Footer";
 
 export default function Chat({ className, ...props }: ComponentProps<"div">) {
   const { selectedChat } = useAppStore();
@@ -15,11 +16,7 @@ export default function Chat({ className, ...props }: ComponentProps<"div">) {
         <>
           <Header selectedChat={selectedChat} />
           <MessageList chatId={selectedChat.id} />
-          <div className="mx-auto flex w-3/4">
-            <div className="my-5 h-[50px] w-full bg-graya-3">
-              Send message...
-            </div>
-          </div>
+          <Footer />
         </>
       )}
     </div>

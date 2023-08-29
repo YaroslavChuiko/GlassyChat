@@ -23,25 +23,18 @@ export default function MessageList({ chatId }: Props) {
   }
 
   return (
-    // <div className="flex-1 overflow-auto">
-    //   {data.map((message) => {
-    //     return <div key={message.id}>{message.content}</div>;
-    //   })}
-    // </div>
-    <ScrollArea.Root className=" flex-1 overflow-hidden rounded">
+    <ScrollArea.Root className="flex-1 overflow-hidden rounded">
       <ScrollArea.Viewport className="h-full w-full rounded">
-        <div className="mx-auto w-3/4">
-          {data.map((message) => {
-            const orientation =
-              session.data?.user?.id === message.author.id ? "right" : "left";
-            return (
-              <Message
-                key={message.id}
-                {...message}
-                orientation={orientation}
-              ></Message>
-            );
-          })}
+        <div className="mx-auto w-3/5">
+          {data.map((message) => (
+            <Message
+              key={message.id}
+              orientation={
+                session.data?.user?.id === message.author.id ? "right" : "left"
+              }
+              {...message}
+            ></Message>
+          ))}
         </div>
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar
@@ -50,13 +43,6 @@ export default function MessageList({ chatId }: Props) {
       >
         <ScrollArea.Thumb className="relative flex-1 rounded-[10px] bg-graya-5 before:absolute before:left-1/2 before:top-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-[44px] before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']" />
       </ScrollArea.Scrollbar>
-      {/* <ScrollArea.Scrollbar
-        className="bg-blackA6 hover:bg-blackA8 flex touch-none select-none p-0.5 transition-colors duration-[160ms] ease-out data-[orientation=horizontal]:h-2.5 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col"
-        orientation="horizontal"
-      >
-        <ScrollArea.Thumb className="bg-mauve10 relative flex-1 rounded-[10px] before:absolute before:left-1/2 before:top-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-[44px] before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']" />
-      </ScrollArea.Scrollbar> */}
-      <ScrollArea.Corner className="bg-blackA8" />
     </ScrollArea.Root>
   );
 }
