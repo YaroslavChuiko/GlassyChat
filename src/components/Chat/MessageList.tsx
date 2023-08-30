@@ -38,10 +38,10 @@ export default function MessageList({ chatId }: Props) {
         </div>
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar
-        className="flex touch-none select-none bg-graya-3 p-0.5 transition-colors duration-[160ms] ease-out hover:bg-graya-4 data-[orientation=horizontal]:h-2.5 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col"
+        className="flex touch-none select-none bg-graya-3 p-0.5 transition-colors duration-[160ms] ease-out hover:bg-graya-4 data-[orientation=horizontal]:h-2.5 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col dark:bg-graydarka-3 dark:hover:bg-graydarka-4"
         orientation="vertical"
       >
-        <ScrollArea.Thumb className="relative flex-1 rounded-[10px] bg-graya-5 before:absolute before:left-1/2 before:top-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-[44px] before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']" />
+        <ScrollArea.Thumb className="relative flex-1 rounded-[10px] bg-graya-5 before:absolute before:left-1/2 before:top-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-[44px] before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] dark:bg-graydarka-5" />
       </ScrollArea.Scrollbar>
     </ScrollArea.Root>
   );

@@ -45,7 +45,7 @@ export default function Message({
           name={author.name ?? ""}
           imgSrc={author.image ?? ""}
         />
-        <div className="flex-1 rounded-[10px] bg-graya-3 px-[10px] py-[6px]">
+        <div className="flex-1 rounded-[10px] bg-graya-3 px-[10px] py-[6px] dark:bg-graydarka-3">
           <div
             className={`${
               USER_NAME_COLORS[author.color]
@@ -59,7 +59,7 @@ export default function Message({
             <span
               className={`${
                 orientation === "right" ? "mr-3" : "ml-3"
-              } text-xs text-gray-11`}
+              } text-xs text-gray-11 dark:text-graydark-11`}
               title={moment(createdAt).format("LLLL")}
             >
               {formatDate(createdAt)}
@@ -68,7 +68,7 @@ export default function Message({
           <div
             className={`${
               orientation === "right" ? "justify-end" : "justify-start"
-            } flex w-full text-base leading-tight text-gray-12`}
+            } flex w-full text-base leading-tight text-gray-12 dark:text-graydark-12`}
           >
             {content}
           </div>

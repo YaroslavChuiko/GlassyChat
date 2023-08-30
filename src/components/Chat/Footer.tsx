@@ -15,7 +15,7 @@ export default function Footer() {
   return (
     <div className="mx-auto my-5 flex w-3/5 items-end">
       <textarea
-        className="mr-[15px] h-[55px] max-h-[200px] flex-1 resize-none rounded-[10px] bg-graya-3 p-[15px]"
+        className="mr-[15px] h-[55px] max-h-[200px] flex-1 resize-none rounded-[10px] bg-graya-3 p-[15px] text-gray-12 placeholder-gray-11 transition hover:bg-graya-4 dark:bg-graydarka-3 dark:text-graydark-12 dark:placeholder-graydark-11 dark:hover:bg-graydarka-4"
         name="message"
         id="message"
         placeholder="Send message..."
