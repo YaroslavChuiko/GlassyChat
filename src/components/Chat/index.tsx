@@ -16,7 +16,7 @@ export default function Chat({ className, ...props }: ComponentProps<"div">) {
         <>
           <Header selectedChat={selectedChat} />
           <MessageList chatId={selectedChat.id} />
-          <Footer />
+          <Footer chatId={selectedChat.id} />
         </>
       )}
     </div>

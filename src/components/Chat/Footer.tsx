@@ -1,15 +1,26 @@
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
-import React from "react";
+import React, { useState } from "react";
 import IconButton from "../IconButton";
+import { api } from "~/utils/api";
 
-export default function Footer() {
-  // const [text, setText] = useState("");
+type Props = {
+  chatId: string;
+};
+
+export default function Footer({ chatId }: Props) {
+  const [text, setText] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value);
     //another way to auto resize the textarea https://medium.com/@oherterich/creating-a-textarea-with-dynamic-height-using-react-and-typescript-5ed2d78d9848
 
     e.target.style.height = "55px";
     e.target.style.height = e.target.scrollHeight + "px";
+  };
+
+  const sendMessage = api.room.sendMessage.useMutation();
+  const handleSendMessage = () => {
+    sendMessage.mutate({ chatId, content: text });
   };
 
   return (
@@ -19,11 +30,13 @@ export default function Footer() {
         name="message"
         id="message"
         placeholder="Send message..."
+        value={text}
         onChange={handleChange}
       ></textarea>
       <IconButton
         className="h-[55px] w-[55px]"
         icon={<PaperPlaneIcon width={25} height={25} />}
+        onClick={handleSendMessage}
       />
     </div>
   );
