@@ -19,9 +19,9 @@ export default function DropdownChatActions({
   chatType,
   className,
 }: Props) {
-  const preventClosingMenu = (e: Event) => {
-    e.preventDefault();
-  };
+  // const preventClosingMenu = (e: Event) => {
+  //   e.preventDefault();
+  // };
 
   return (
     <DropdownMenu.Root>
