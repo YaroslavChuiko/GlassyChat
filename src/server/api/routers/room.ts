@@ -183,7 +183,7 @@ export const roomRouter = createTRPCRouter({
       });
 
       pusher
-        .trigger(`room-${roomId}`, "new-member", ctx.session.user)
+        .trigger(`chat-${roomId}`, "new-member", ctx.session.user)
         .catch((e) => {
           throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", cause: e });
         });
@@ -234,18 +234,18 @@ export const roomRouter = createTRPCRouter({
     }),
 
   sendMessage: protectedProcedure
-    .input(z.object({ roomId: z.string(), content: z.string().min(1) }))
+    .input(z.object({ chatId: z.string(), content: z.string().min(1) }))
     .mutation(async ({ input, ctx }) => {
-      const { roomId, content } = input;
+      const { chatId, content } = input;
 
-      await ensureRoomExists(ctx.prisma, roomId);
+      await ensureRoomExists(ctx.prisma, chatId);
 
       const message = await ctx.prisma.message.create({
         data: {
           content,
           room: {
             connect: {
-              id: roomId,
+              id: chatId,
             },
           },
           author: {
@@ -266,10 +266,50 @@ export const roomRouter = createTRPCRouter({
         },
       });
 
-      pusher.trigger(`room-${roomId}`, "new-message", message).catch((e) => {
+      pusher.trigger(`chat-${chatId}`, "new-message", message).catch((e) => {
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", cause: e });
       });
 
       return message;
+    }),
+
+  infiniteMessages: protectedProcedure
+    .input(
+      z.object({
+        chatId: z.string(),
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(), // <-- "cursor" needs to exist, but can be any type
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const limit = input.limit ?? 30;
+      const { chatId, cursor } = input;
+
+      await ensureRoomExists(ctx.prisma, chatId);
+
+      const messages = await ctx.prisma.message.findMany({
+        take: limit + 1, // get an extra item at the end which we'll use as next cursor
+        where: {
+          roomId: chatId,
+        },
+        include: {
+          author: true,
+        },
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (messages.length > limit) {
+        const nextItem = messages.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return {
+        messages,
+        nextCursor,
+      };
     }),
 });
