@@ -2,11 +2,11 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { usePusher } from "~/hooks/usePusher";
 import { useAppStore } from "~/store/store";
-import { type RouterOutputs } from "~/utils/api";
-import Avatar from "../Avatar";
 import { type Chat } from "~/types/Chat";
+import { type Message } from "~/types/Message";
+import Avatar from "../Avatar";
 
-type Message = RouterOutputs["room"]["sendMessage"]; // Message | undefined = Room["lastMessage"]
+// Message | undefined = Chat["lastMessage"]
 type Props = {
   chatInfo: Chat;
 };
@@ -20,13 +20,15 @@ export default function ChatListItem({ chatInfo }: Props) {
   useEffect(() => {
     if (!pusher) return;
 
-    const channel = pusher.subscribe(`room-${id}`);
+    const channel = pusher.subscribe(`chat-${id}`);
 
     channel.bind("new-message", (data: Message) => {
-      setLastInfo(data);
+      //!! this is not working because the lastMessage is not updated (mb because of the double subscribing and binding to the same event, here and MessageList.tsx)
+      setLastInfo({ ...data });
     });
 
     return () => {
+      channel.unbind_all();
       channel.disconnect();
     };
   }, [pusher, id]);
