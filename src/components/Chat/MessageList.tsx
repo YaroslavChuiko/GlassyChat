@@ -1,8 +1,11 @@
-import React from "react";
-import { api } from "~/utils/api";
-import * as ScrollArea from "@radix-ui/react-scroll-area";
-import Message from "./Message";
+import moment from "moment";
 import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { usePusher } from "~/hooks/usePusher";
+import { type Message as TMessage } from "~/types/Message";
+import { api } from "~/utils/api";
+import Message from "./Message";
 
 type Props = {
   chatId: string;
@@ -10,39 +13,101 @@ type Props = {
 
 export default function MessageList({ chatId }: Props) {
   const session = useSession();
-  const { data, isLoading, isSuccess } = api.room.getMessages.useQuery({
-    id: chatId,
-  });
+  const pusher = usePusher();
+  const messagesEndRef = React.useRef<HTMLDivElement>(null);
+
+  const [newMessages, setNewMessages] = useState<TMessage[]>([]);
+
+  const {
+    data,
+    isSuccess,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = api.room.infiniteMessages.useInfiniteQuery(
+    {
+      chatId,
+      limit: 20,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      // initialCursor: 1, // <-- optional you can pass an initialCursor
+    }
+  );
+
+  // useEffect(() => {
+  //   messagesEndRef.current?.scrollIntoView();
+  // }, [isSuccess]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [newMessages]);
+
+  useEffect(() => {
+    if (!pusher) return;
+
+    const channel = pusher.subscribe(`chat-${chatId}`);
+
+    channel.bind("new-message", (data: TMessage) => {
+      setNewMessages((prev) => [...prev, data]);
+      // scrollToBottom();
+    });
+
+    return () => {
+      channel.unbind_all();
+      channel.disconnect();
+    };
+  }, [pusher, chatId]);
 
   if (isLoading || !data) {
-    return <div>Loading...</div>;
+    return <div className="flex-1">Loading...</div>;
   }
 
-  if (isSuccess && !data.length) {
-    return <div>There are no messages yet!</div>;
-  }
+  // if (isSuccess && !data.length) {
+  //   return <div className="flex-1">There are no messages yet!</div>;
+  // }
+
+  const sortMessagesByDates = (a: TMessage, b: TMessage) => {
+    if (moment(a.createdAt).isAfter(b.createdAt)) return 1;
+    if (moment(a.createdAt).isBefore(b.createdAt)) return -1;
+    return 0;
+  };
+
+  const renderMessage = (message: TMessage) => {
+    return (
+      <Message
+        key={message.id}
+        orientation={
+          session.data?.user?.id === message.author.id ? "right" : "left"
+        }
+        {...message}
+      />
+    );
+  };
 
   return (
-    <ScrollArea.Root className="flex-1 overflow-hidden rounded">
-      <ScrollArea.Viewport className="h-full w-full rounded">
-        <div className="mx-auto w-3/5">
-          {data.map((message) => (
-            <Message
-              key={message.id}
-              orientation={
-                session.data?.user?.id === message.author.id ? "right" : "left"
-              }
-              {...message}
-            ></Message>
-          ))}
-        </div>
-      </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar
-        className="flex touch-none select-none bg-graya-3 p-0.5 transition-colors duration-[160ms] ease-out hover:bg-graya-4 data-[orientation=horizontal]:h-2.5 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col dark:bg-graydarka-3 dark:hover:bg-graydarka-4"
-        orientation="vertical"
+    <div
+      id="scrollableDiv"
+      className="flex flex-1 flex-col-reverse overflow-y-auto"
+    >
+      <InfiniteScroll
+        className="mx-auto flex w-3/5 flex-col-reverse"
+        dataLength={data.pages.length * 20}
+        next={fetchNextPage}
+        inverse={true} //
+        hasMore={hasNextPage ?? true}
+        loader={<h4>Loading...</h4>}
+        scrollableTarget="scrollableDiv"
       >
-        <ScrollArea.Thumb className="relative flex-1 rounded-[10px] bg-graya-5 before:absolute before:left-1/2 before:top-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-[44px] before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] dark:bg-graydarka-5" />
-      </ScrollArea.Scrollbar>
-    </ScrollArea.Root>
+        <div ref={messagesEndRef}></div>
+        {[...newMessages].sort(sortMessagesByDates).map(renderMessage)}
+        {data.pages.map((group, i) => (
+          <React.Fragment key={i}>
+            {group.messages.map(renderMessage)}
+          </React.Fragment>
+        ))}
+      </InfiniteScroll>
+    </div>
   );
 }
