@@ -270,6 +270,12 @@ export const roomRouter = createTRPCRouter({
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", cause: e });
       });
 
+      pusher
+        .trigger(`chat-info-${chatId}`, "last-message", message)
+        .catch((e) => {
+          throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", cause: e });
+        });
+
       return message;
     }),
 

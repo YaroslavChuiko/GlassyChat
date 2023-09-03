@@ -20,10 +20,9 @@ export default function ChatListItem({ chatInfo }: Props) {
   useEffect(() => {
     if (!pusher) return;
 
-    const channel = pusher.subscribe(`chat-${id}`);
+    const channel = pusher.subscribe(`chat-info-${id}`);
 
-    channel.bind("new-message", (data: Message) => {
-      //!! this is not working because the lastMessage is not updated (mb because of the double subscribing and binding to the same event, here and MessageList.tsx)
+    channel.bind("last-message", (data: Message) => {
       setLastInfo({ ...data });
     });
 
@@ -32,11 +31,6 @@ export default function ChatListItem({ chatInfo }: Props) {
       channel.disconnect();
     };
   }, [pusher, id]);
-
-  // const sendMessage = api.room.sendMessage.useMutation();
-  // const handleSendMessage = () => {
-  //   sendMessage.mutate({ roomId: id, content: "new message" });
-  // };
 
   const handleClick = () => {
     setSelectedChat(chatInfo);
