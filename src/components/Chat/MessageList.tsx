@@ -11,12 +11,13 @@ type Props = {
   chatId: string;
 };
 
+const messagesPerPage = 20;
+
 export default function MessageList({ chatId }: Props) {
   const session = useSession();
   const pusher = usePusher();
-  const messagesEndRef = React.useRef<HTMLDivElement>(null);
-
   const [newMessages, setNewMessages] = useState<TMessage[]>([]);
+  const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
   const {
     data,
@@ -24,21 +25,23 @@ export default function MessageList({ chatId }: Props) {
     isLoading,
     hasNextPage,
     fetchNextPage,
-    isFetchingNextPage,
+    isRefetching,
   } = api.room.infiniteMessages.useInfiniteQuery(
     {
       chatId,
-      limit: 20,
+      limit: messagesPerPage,
     },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       // initialCursor: 1, // <-- optional you can pass an initialCursor
+      // refetchOnReconnect: false,
+      // refetchOnWindowFocus: false,
     }
   );
 
-  // useEffect(() => {
-  //   messagesEndRef.current?.scrollIntoView();
-  // }, [isSuccess]);
+  useEffect(() => {
+    if (!isRefetching) setNewMessages([]); // set newMessages to empty arr after refetching
+  }, [isRefetching]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -51,7 +54,6 @@ export default function MessageList({ chatId }: Props) {
 
     channel.bind("new-message", (data: TMessage) => {
       setNewMessages((prev) => [...prev, data]);
-      // scrollToBottom();
     });
 
     return () => {
@@ -60,17 +62,9 @@ export default function MessageList({ chatId }: Props) {
     };
   }, [pusher, chatId]);
 
-  if (isLoading || !data) {
-    return <div className="flex-1">Loading...</div>;
-  }
-
-  // if (isSuccess && !data.length) {
-  //   return <div className="flex-1">There are no messages yet!</div>;
-  // }
-
   const sortMessagesByDates = (a: TMessage, b: TMessage) => {
-    if (moment(a.createdAt).isAfter(b.createdAt)) return 1;
-    if (moment(a.createdAt).isBefore(b.createdAt)) return -1;
+    if (moment(a.createdAt).isAfter(b.createdAt)) return -1;
+    if (moment(a.createdAt).isBefore(b.createdAt)) return 1;
     return 0;
   };
 
@@ -86,6 +80,14 @@ export default function MessageList({ chatId }: Props) {
     );
   };
 
+  if (isLoading || !data) {
+    return <div className="flex-1">Loading...</div>;
+  }
+
+  if (isSuccess && !data.pages.length && !newMessages.length) {
+    return <div className="flex-1">There are no messages yet!</div>;
+  }
+
   return (
     <div
       id="scrollableDiv"
@@ -93,9 +95,9 @@ export default function MessageList({ chatId }: Props) {
     >
       <InfiniteScroll
         className="mx-auto flex w-3/5 flex-col-reverse"
-        dataLength={data.pages.length * 20}
+        dataLength={data.pages.length * messagesPerPage}
         next={fetchNextPage}
-        inverse={true} //
+        inverse={true}
         hasMore={hasNextPage ?? true}
         loader={<h4>Loading...</h4>}
         scrollableTarget="scrollableDiv"
