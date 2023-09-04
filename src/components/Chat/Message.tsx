@@ -2,6 +2,7 @@ import moment from "moment";
 import { USER_NAME_COLORS } from "~/const/const";
 import { type RouterOutputs } from "~/utils/api";
 import Avatar from "../Avatar";
+import React from "react";
 
 type Message = RouterOutputs["room"]["getMessages"][number];
 
@@ -70,7 +71,12 @@ export default function Message({
               orientation === "right" ? "justify-end" : "justify-start"
             } flex w-full text-base leading-tight text-gray-12 dark:text-graydark-12`}
           >
-            {content}
+            {content.split("\n").map((line, i) => (
+              <React.Fragment key={i}>
+                {line}
+                <br />
+              </React.Fragment>
+            ))}
           </div>
         </div>
       </div>
