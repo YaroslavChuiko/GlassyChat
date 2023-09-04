@@ -38,6 +38,7 @@ export default function Footer({ chatId }: Props) {
 
     sendMessage.mutate({ chatId, content: message });
     reset(defaultValues);
+    //!! bug: need to reset textarea height
   };
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -48,12 +49,12 @@ export default function Footer({ chatId }: Props) {
     if (e.key === "Enter") {
       e.preventDefault();
 
-      if (e.ctrlKey) {
+      if (e.shiftKey) {
         setValue("message", getValues("message") + "\n");
-        autoResizeTextarea(e.currentTarget);
       } else {
         handleSubmit(onSubmit)().catch(console.error);
       }
+      autoResizeTextarea(e.currentTarget);
     }
   };
 
