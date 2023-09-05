@@ -21,7 +21,7 @@ export default function Footer({ chatId }: Props) {
   const {
     handleSubmit,
     register,
-    formState: { isDirty, isSubmitting },
+    formState: { isDirty },
     reset,
     setValue,
     getValues,
@@ -29,14 +29,14 @@ export default function Footer({ chatId }: Props) {
     defaultValues,
   });
 
-  const sendMessage = api.room.sendMessage.useMutation();
+  const sendMessageMutation = api.room.sendMessage.useMutation();
 
   const onSubmit = (value: FormValues) => {
     const message = value.message.trim();
 
-    if (!isDirty || isSubmitting || !message) return;
+    if (!isDirty || sendMessageMutation.isLoading || !message) return;
 
-    sendMessage.mutate({ chatId, content: message });
+    sendMessageMutation.mutate({ chatId, content: message });
     reset(defaultValues);
     //!! bug: need to reset textarea height
   };
@@ -77,7 +77,9 @@ export default function Footer({ chatId }: Props) {
         {...register("message")}
       ></textarea>
       <IconButton
-        className="h-[55px] w-[55px]"
+        className={`h-[55px] w-[55px] ${
+          sendMessageMutation.isLoading && "animate-pulse"
+        }`}
         icon={<PaperPlaneIcon width={25} height={25} />}
       />
     </form>
