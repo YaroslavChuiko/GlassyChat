@@ -6,6 +6,7 @@ import { usePusher } from "~/hooks/usePusher";
 import { type Message as TMessage } from "~/types/Message";
 import { api } from "~/utils/api";
 import Message from "./Message";
+import Loader from "../Loader";
 
 type Props = {
   chatId: string;
@@ -44,6 +45,7 @@ export default function MessageList({ chatId }: Props) {
   }, [isRefetching]);
 
   useEffect(() => {
+    //!! mb delete and add scroll to bottom button
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [newMessages]);
 
@@ -81,7 +83,7 @@ export default function MessageList({ chatId }: Props) {
   };
 
   if (isLoading || !data) {
-    return <div className="flex-1">Loading...</div>;
+    return <Loader size="lg" />;
   }
 
   if (isSuccess && !data.pages.length && !newMessages.length) {
@@ -94,12 +96,12 @@ export default function MessageList({ chatId }: Props) {
       className="flex flex-1 flex-col-reverse overflow-y-auto"
     >
       <InfiniteScroll
-        className="mx-auto flex w-3/5 flex-col-reverse"
+        className="mx-auto flex w-3/5 flex-col-reverse overflow-hidden"
         dataLength={data.pages.length * messagesPerPage}
         next={fetchNextPage}
         inverse={true}
         hasMore={hasNextPage ?? true}
-        loader={<h4>Loading...</h4>}
+        loader={<Loader size="sm" className="p-4" />}
         scrollableTarget="scrollableDiv"
       >
         <div ref={messagesEndRef}></div>
