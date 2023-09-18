@@ -96,7 +96,7 @@ export default function MessageList({ chatId }: Props) {
       className="flex flex-1 flex-col-reverse overflow-y-auto"
     >
       <InfiniteScroll
-        className="mx-auto flex w-3/5 flex-col-reverse overflow-hidden"
+        className="mx-auto flex w-full flex-col-reverse overflow-hidden px-2 sm:px-7 xl:w-3/5 xl:px-0"
         dataLength={data.pages.length * messagesPerPage}
         next={fetchNextPage}
         inverse={true}

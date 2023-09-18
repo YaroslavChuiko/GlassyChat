@@ -7,7 +7,7 @@ import { getServerAuthSession } from "~/server/auth";
 import { useAppStore } from "~/store/store";
 
 export default function Home() {
-  const { colorTheme } = useAppStore();
+  const { colorTheme, isSidebarShowed } = useAppStore();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -18,10 +18,17 @@ export default function Home() {
     <div
       className={`${
         isClient && THEME_GRADIENTS[colorTheme]
-      } flex max-h-screen min-h-screen min-w-full p-8`}
+      } flex max-h-screen min-h-screen min-w-full overflow-hidden lg:p-8`}
     >
-      <Sidebar className="mr-11" />
-      <Chat className="flex-1" />
+      <div
+        className={`relative flex w-full transition ${
+          !isSidebarShowed &&
+          "-translate-x-full min-[600px]:translate-x-[-450px] lg:translate-x-0"
+        }`}
+      >
+        <Sidebar className="lg:mr-7 xl:mr-10" />
+        <Chat className="flex-1" />
+      </div>
     </div>
   );
 }

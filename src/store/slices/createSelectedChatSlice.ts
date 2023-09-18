@@ -3,7 +3,7 @@ import { type Chat } from "~/types/Chat";
 
 export type SelectedChatSlice = {
   selectedChat: Chat | null;
-  setSelectedChat: (chat: Chat) => void;
+  setSelectedChat: (chat: Chat | null) => void;
 };
 
 export const createSelectedChatSlice: StateCreator<SelectedChatSlice> = (

@@ -15,7 +15,7 @@ export default function ChatListItem({ chatInfo }: Props) {
   const { id, name, color, lastMessage } = chatInfo;
   const pusher = usePusher();
   const [lastInfo, setLastInfo] = useState<Chat["lastMessage"]>(lastMessage);
-  const { selectedChat, setSelectedChat } = useAppStore();
+  const { selectedChat, setSelectedChat, setIsSidebarShowed } = useAppStore();
 
   useEffect(() => {
     if (!pusher) return;
@@ -34,6 +34,7 @@ export default function ChatListItem({ chatInfo }: Props) {
 
   const handleClick = () => {
     setSelectedChat(chatInfo);
+    setIsSidebarShowed(false); // close sidebar on mobile
   };
 
   return (
