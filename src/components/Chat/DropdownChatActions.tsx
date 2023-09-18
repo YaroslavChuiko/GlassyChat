@@ -40,7 +40,10 @@ export default function DropdownChatActions({
         >
           {userRole === "ADMIN" && (
             <>
-              <DropdownMenu.Item className="my-[2px] flex h-[30px] cursor-pointer select-none items-center rounded-[5px] p-1 leading-none  outline-none transition active:scale-[0.98] data-[disabled]:pointer-events-none data-[highlighted]:bg-graya-4 data-[disabled]:text-gray-11 dark:data-[highlighted]:bg-graydarka-4 dark:data-[disabled]:text-graydark-11">
+              <DropdownMenu.Item
+                className="my-[2px] flex h-[30px] cursor-pointer select-none items-center rounded-[5px] p-1 leading-none  outline-none transition active:scale-[0.98] data-[disabled]:pointer-events-none data-[highlighted]:bg-graya-4 data-[disabled]:text-gray-11 dark:data-[highlighted]:bg-graydarka-4 dark:data-[disabled]:text-graydark-11"
+                onSelect={() => console.log("Not implemented yet")} //!! implement edit chat
+              >
                 <Pencil1Icon height={20} width={20} className="ml-2 mr-5" />
                 Edit
               </DropdownMenu.Item>
@@ -48,7 +51,7 @@ export default function DropdownChatActions({
               {chatType !== "GLOBAL" && (
                 <DropdownMenu.Item
                   className="my-[2px] flex h-[30px] cursor-pointer select-none items-center rounded-[5px] p-1 leading-none outline-none transition active:scale-[0.98] data-[disabled]:pointer-events-none data-[highlighted]:bg-graya-4 data-[disabled]:text-gray-11 dark:data-[highlighted]:bg-graydarka-4 dark:data-[disabled]:text-graydark-11"
-                  // onSelect={() => void signOut()}
+                  onSelect={() => console.log("Not implemented yet")} //!! implement delete chat
                 >
                   <TrashIcon height={20} width={20} className="ml-2 mr-5" />
                   Delete Chat
@@ -61,7 +64,7 @@ export default function DropdownChatActions({
             <>
               <DropdownMenu.Item
                 className="my-[2px] flex h-[30px] cursor-pointer select-none items-center rounded-[5px] p-1 leading-none outline-none transition active:scale-[0.98] data-[disabled]:pointer-events-none data-[highlighted]:bg-graya-4 data-[disabled]:text-gray-11 dark:data-[highlighted]:bg-graydarka-4 dark:data-[disabled]:text-graydark-11"
-                // onSelect={() => void signOut()}
+                onSelect={() => console.log("Not implemented yet")} //!! implement leave chat
               >
                 <ExitIcon height={20} width={20} className="ml-2 mr-5" />
                 Leave Chat
