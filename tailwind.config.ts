@@ -27,6 +27,17 @@ export default {
           from: { opacity: "0", transform: "translateX(-2px)" },
           to: { opacity: "1", transform: "translateX(0)" },
         },
+        gradient: {
+          "0%": {
+            backgroundPosition: "0% 50%",
+          },
+          "50%": {
+            backgroundPosition: "100% 50%",
+          },
+          "100%": {
+            backgroundPosition: "0% 50%",
+          },
+        },
       },
       animation: {
         slideDownAndFade:
@@ -36,6 +47,7 @@ export default {
         slideUpAndFade: "slideUpAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
         slideRightAndFade:
           "slideRightAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
+        gradient: "gradient 30s ease infinite",
       },
     },
   },

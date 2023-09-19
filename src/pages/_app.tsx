@@ -4,8 +4,9 @@ import { type AppType } from "next/app";
 import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import PusherProvider from "~/provider/PusherProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppStore } from "~/store/store";
+import { THEME_GRADIENTS } from "~/const/const";
 // import { Lato } from "next/font/google";
 
 // const lato = Lato({
@@ -17,7 +18,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-  const applyDarkMode = useAppStore((state) => state.applyDarkMode);
+  const { applyDarkMode, colorTheme } = useAppStore();
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true); // zustand persist is used - error: Text content does not match server-rendered HTML https://nextjs.org/docs/messages/react-hydration-error#solution-1-using-useeffect-to-run-on-the-client-only
+  }, []);
 
   useEffect(() => {
     applyDarkMode();
@@ -26,8 +33,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <PusherProvider>
-        {/* <main className={lato.className}> */}
-        <main className="font-sans">
+        <main
+          className={`${
+            isClient && THEME_GRADIENTS[colorTheme]
+          } flex max-h-screen min-h-screen min-w-full animate-gradient overflow-hidden bg-[length:400%_400%] font-sans lg:p-8`}
+        >
           <Component {...pageProps} />
         </main>
       </PusherProvider>

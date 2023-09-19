@@ -10,7 +10,7 @@ export type ThemeSlice = {
 };
 
 export const createThemeSlice: StateCreator<ThemeSlice> = (set, get) => ({
-  colorTheme: "blue",
+  colorTheme: "amaranthus",
   darkMode: false,
   setColorTheme: (colorTheme) => set({ colorTheme: colorTheme }),
   toggleDarkMode: () => {
