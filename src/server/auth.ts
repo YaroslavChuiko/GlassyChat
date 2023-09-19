@@ -53,6 +53,9 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
+  pages: {
+    signIn: "/auth/signin",
+  },
   events: {
     signIn: async ({ user, isNewUser }) => {
       if (isNewUser) {
