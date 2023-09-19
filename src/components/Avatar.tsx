@@ -1,6 +1,6 @@
 import { type RoomColor, type UserColor } from "@prisma/client";
 import * as AvatarRadix from "@radix-ui/react-avatar";
-import { geAvatarColor } from "~/utils/getColor";
+import { getAvatarColor } from "~/utils/getColor";
 
 type Size = "sm" | "md" | "lg";
 type Color = RoomColor | UserColor;
@@ -12,6 +12,8 @@ type Props = {
   color: Color;
   className?: string;
 };
+
+//TODO: fix providers avatar url
 
 export default function Avatar({
   imgSrc = "",
@@ -33,7 +35,7 @@ export default function Avatar({
           alt={name}
         />
         <AvatarRadix.Fallback
-          className={`${geAvatarColor(
+          className={`${getAvatarColor(
             color
           )} leading-1 flex h-full w-full items-center justify-center  font-medium`}
         >
