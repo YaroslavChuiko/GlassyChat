@@ -18,9 +18,10 @@ const PusherProvider = ({ children }: Props) => {
         })
       );
 
-      Pusher.log = (msg) => {
-        console.log(msg);
-      };
+      // log pusher events
+      // Pusher.log = (msg) => {
+      //   console.log(msg);
+      // };
     }
 
     return () => {
