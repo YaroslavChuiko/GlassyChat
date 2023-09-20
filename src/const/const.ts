@@ -1,7 +1,7 @@
 import type { ChatColor, UserColor } from "@prisma/client";
 import { type ColorTheme } from "~/types/ColorTheme";
 
-export const GLOBAL_ROOM_NAME = "Main room";
+export const GLOBAL_CHAT_NAME = "Main room";
 
 export const ALL_CHAT_COLORS: ChatColor[] = [
   "CHAT_COLOR_1",

@@ -1,6 +1,6 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient, type UserColor } from "@prisma/client";
-import { GLOBAL_ROOM_NAME } from "../src/const/const";
+import { GLOBAL_CHAT_NAME } from "../src/const/const";
 
 const prisma = new PrismaClient();
 const adapter = PrismaAdapter(prisma);
@@ -23,7 +23,7 @@ async function main() {
 
   const chat = await prisma.chat.create({
     data: {
-      name: GLOBAL_ROOM_NAME,
+      name: GLOBAL_CHAT_NAME,
       color: "CHAT_COLOR_1",
       type: "GLOBAL",
       members: {
