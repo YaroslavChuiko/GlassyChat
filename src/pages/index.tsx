@@ -1,4 +1,5 @@
 import { type GetServerSideProps } from "next";
+import Head from "next/head";
 import Chat from "~/components/Chat";
 import Sidebar from "~/components/Sidebar";
 import { getServerAuthSession } from "~/server/auth";
@@ -14,6 +15,9 @@ export default function Home() {
         "-translate-x-full min-[600px]:translate-x-[-450px] lg:translate-x-0"
       }`}
     >
+      <Head>
+        <title>Glassy Chat</title>
+      </Head>
       <Sidebar className="lg:mr-7 xl:mr-10" />
       <Chat className="flex-1" />
     </div>
