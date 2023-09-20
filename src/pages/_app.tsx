@@ -7,12 +7,6 @@ import PusherProvider from "~/provider/PusherProvider";
 import { useEffect, useState } from "react";
 import { useAppStore } from "~/store/store";
 import { THEME_GRADIENTS } from "~/const/const";
-// import { Lato } from "next/font/google";
-
-// const lato = Lato({
-//   weight: ["400", "700"],
-//   subsets: ["latin"],
-// });
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,

@@ -15,12 +15,6 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -62,7 +56,7 @@ model User {
 
     //non nextAuth
     color    UserColor
-    rooms    UserRoom[]
+    chats    UserChat[]
     messages Message[]
 }
 
@@ -74,29 +68,29 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-model Room {
+model Chat {
     id        String     @id @default(cuid())
     createdAt DateTime   @default(now())
     updatedAt DateTime   @updatedAt
     name      String     @unique // pusher chanel name max 164
-    type      RoomType
-    color     RoomColor
+    type      ChatType
+    color     ChatColor
     messages  Message[]
-    members   UserRoom[]
+    members   UserChat[]
 }
 
-model UserRoom {
+model UserChat {
     createdAt DateTime     @default(now())
     updatedAt DateTime     @updatedAt
     user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId    String
-    room      Room         @relation(fields: [roomId], references: [id], onDelete: Cascade)
-    roomId    String
-    role      RoomUserRole
+    chat      Chat         @relation(fields: [chatId], references: [id], onDelete: Cascade)
+    chatId    String
+    role      ChatUserRole
 
-    @@id([userId, roomId])
+    @@id([userId, chatId])
     @@index([userId])
-    @@index([roomId])
+    @@index([chatId])
 }
 
 model Message {
@@ -106,30 +100,30 @@ model Message {
     content   String   @db.Text //? 
     author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
     authorId  String
-    room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
-    roomId    String
+    chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+    chatId    String
 
     @@index([authorId])
-    @@index([roomId])
+    @@index([chatId])
 }
 
-enum RoomUserRole {
+enum ChatUserRole {
     MEMBER
     ADMIN
 }
 
-enum RoomType {
+enum ChatType {
     PUBLIC
     PRIVATE
     GLOBAL // global chat room for all users 
 }
 
-enum RoomColor {
-    ROOM_COLOR_1
-    ROOM_COLOR_2
-    ROOM_COLOR_3
-    ROOM_COLOR_4
-    ROOM_COLOR_5
+enum ChatColor {
+    CHAT_COLOR_2
+    CHAT_COLOR_1
+    CHAT_COLOR_3
+    CHAT_COLOR_4
+    CHAT_COLOR_5
 }
 
 enum UserColor {

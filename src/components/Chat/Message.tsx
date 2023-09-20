@@ -1,10 +1,8 @@
 import moment from "moment";
 import { USER_NAME_COLORS } from "~/const/const";
-import { type RouterOutputs } from "~/utils/api";
 import Avatar from "../Avatar";
 import React from "react";
-
-type Message = RouterOutputs["room"]["getMessages"][number];
+import { type Message } from "~/types/Message";
 
 type Props = {
   orientation: "left" | "right";

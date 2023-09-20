@@ -27,7 +27,7 @@ export default function MessageList({ chatId }: Props) {
     hasNextPage,
     fetchNextPage,
     isRefetching,
-  } = api.room.infiniteMessages.useInfiniteQuery(
+  } = api.chat.infiniteMessages.useInfiniteQuery(
     {
       chatId,
       limit: messagesPerPage,

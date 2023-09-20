@@ -1,4 +1,4 @@
-import type { RoomType, RoomUserRole } from "@prisma/client";
+import type { ChatType, ChatUserRole } from "@prisma/client";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {
   DotsVerticalIcon,
@@ -9,8 +9,8 @@ import {
 import IconButton from "../IconButton";
 
 type Props = {
-  userRole: RoomUserRole;
-  chatType: RoomType;
+  userRole: ChatUserRole;
+  chatType: ChatType;
   className?: string;
 };
 

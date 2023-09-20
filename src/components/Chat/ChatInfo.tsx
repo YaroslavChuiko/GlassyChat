@@ -10,7 +10,7 @@ type Props = {
 export default function ChatInfo({ chat }: Props) {
   const { id, name, color } = chat;
 
-  const membersCount = api.room.getMembersCount.useQuery({ id });
+  const membersCount = api.chat.getMembersCount.useQuery({ id });
 
   return (
     <div className="flex items-center">

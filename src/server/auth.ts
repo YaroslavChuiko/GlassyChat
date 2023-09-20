@@ -65,14 +65,16 @@ export const authOptions: NextAuthOptions = {
         };
         const authorizedCaller = appRouter.createCaller({ prisma, session });
 
-        const mainRoom = await prisma.room.findFirst({
+        const mainChat = await prisma.chat.findFirst({
           where: {
             type: "GLOBAL",
           },
         });
 
-        await authorizedCaller.room.join({
-          roomId: mainRoom!.id,
+        if (!mainChat) return;
+
+        await authorizedCaller.chat.join({
+          chatId: mainChat.id,
         });
       }
     },

@@ -29,7 +29,7 @@ export default function Footer({ chatId }: Props) {
     defaultValues,
   });
 
-  const sendMessageMutation = api.room.sendMessage.useMutation();
+  const sendMessageMutation = api.chat.sendMessage.useMutation();
 
   const onSubmit = (value: FormValues) => {
     const message = value.message.trim();

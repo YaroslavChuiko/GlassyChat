@@ -1,9 +1,9 @@
-import { type RoomColor, type UserColor } from "@prisma/client";
+import { type ChatColor, type UserColor } from "@prisma/client";
 import * as AvatarRadix from "@radix-ui/react-avatar";
 import { getAvatarColor } from "~/utils/getColor";
 
 type Size = "sm" | "md" | "lg";
-type Color = RoomColor | UserColor;
+type Color = ChatColor | UserColor;
 
 type Props = {
   imgSrc?: string;

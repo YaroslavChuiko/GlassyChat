@@ -21,10 +21,10 @@ async function main() {
     userId: superAdmin.id,
   });
 
-  const room = await prisma.room.create({
+  const chat = await prisma.chat.create({
     data: {
       name: GLOBAL_ROOM_NAME,
-      color: "ROOM_COLOR_1",
+      color: "CHAT_COLOR_1",
       type: "GLOBAL",
       members: {
         create: {
@@ -38,7 +38,7 @@ async function main() {
       },
     },
   });
-  console.log({ superAdmin, account, room });
+  console.log({ superAdmin, account, chat });
 }
 
 main()

@@ -15,22 +15,22 @@ export const userRouter = createTRPCRouter({
           id: input.id,
         },
         include: {
-          rooms: true,
+          chats: true,
         },
       });
     }),
 
-  getRooms: protectedProcedure
+  getChats: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
-      const userRooms = await ctx.prisma.user.findUnique({
+      const userChats = await ctx.prisma.user.findUnique({
         where: {
           id: input.id,
         },
         select: {
-          rooms: {
+          chats: {
             select: {
-              room: {
+              chat: {
                 include: {
                   messages: {
                     include: {
@@ -56,16 +56,16 @@ export const userRouter = createTRPCRouter({
         },
       });
 
-      if (!userRooms) {
+      if (!userChats) {
         return [];
       }
 
-      return userRooms.rooms.map((room) => {
-        const { messages, ...rest } = room.room;
+      return userChats.chats.map((chat) => {
+        const { messages, ...rest } = chat.chat;
         return {
           ...rest,
           lastMessage: messages[0],
-          userRole: room.role,
+          userRole: chat.role,
         };
       });
     }),

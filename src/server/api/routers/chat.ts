@@ -2,15 +2,15 @@ import { type PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { pusher } from "~/server/pusher";
-import { getRandomRoomColor } from "~/utils/getRandomColor";
+import { getRandomChatColor } from "~/utils/getRandomColor";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-const ensureRoomExists = async (
+const ensureChatExists = async (
   prisma: PrismaClient,
   id: string
 ): Promise<void> => {
   try {
-    await prisma.room.findUniqueOrThrow({
+    await prisma.chat.findUniqueOrThrow({
       where: { id },
     });
   } catch (error) {
@@ -24,16 +24,16 @@ const ensureRoomExists = async (
 
 const ensureUserNotJoinedAlready = async (
   prisma: PrismaClient,
-  roomId: string,
+  chatId: string,
   userId: string
 ): Promise<void> => {
-  const userRoom = await prisma.userRoom.findUnique({
-    where: { userId_roomId: { userId, roomId } },
+  const userRoom = await prisma.userChat.findUnique({
+    where: { userId_chatId: { userId, chatId } },
   });
   if (userRoom) {
     throw new TRPCError({
       code: "BAD_REQUEST",
-      message: "You have already joined this room!",
+      message: "You have already joined this chat!",
     });
   }
 };
@@ -41,20 +41,20 @@ const ensureUserNotJoinedAlready = async (
 const ensureUserIsAdmin = async (
   prisma: PrismaClient,
   userId: string,
-  roomId: string
+  chatId: string
 ): Promise<void> => {
-  const userRoom = await prisma.userRoom.findUnique({
-    where: { userId_roomId: { userId, roomId } },
+  const userChat = await prisma.userChat.findUnique({
+    where: { userId_chatId: { userId, chatId } },
   });
 
-  if (!userRoom) {
+  if (!userChat) {
     throw new TRPCError({
       code: "BAD_REQUEST",
-      message: "You are not a member of this room!",
+      message: "You are not a member of this chat!",
     });
   }
 
-  if (userRoom.role !== "ADMIN") {
+  if (userChat.role !== "ADMIN") {
     throw new TRPCError({
       code: "FORBIDDEN",
       message: "This action is only available for admins!",
@@ -62,12 +62,12 @@ const ensureUserIsAdmin = async (
   }
 };
 
-const ensureRoomNameUnique = async (
+const ensureChatNameUnique = async (
   prisma: PrismaClient,
   name: string,
   notId = ""
 ): Promise<void> => {
-  const exists = await prisma.room.findUnique({
+  const exists = await prisma.chat.findUnique({
     where: {
       name,
       NOT: {
@@ -78,12 +78,12 @@ const ensureRoomNameUnique = async (
   if (exists) {
     throw new TRPCError({
       code: "BAD_REQUEST",
-      message: "The room with this name already exists",
+      message: "The chat with this name already exists",
     });
   }
 };
 
-export const roomRouter = createTRPCRouter({
+export const chatRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
@@ -91,13 +91,13 @@ export const roomRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      await ensureRoomNameUnique(ctx.prisma, input.name);
+      await ensureChatNameUnique(ctx.prisma, input.name);
 
-      const room = await ctx.prisma.room.create({
+      const chat = await ctx.prisma.chat.create({
         data: {
           name: input.name,
           type: "PUBLIC",
-          color: getRandomRoomColor(),
+          color: getRandomChatColor(),
           members: {
             create: {
               user: {
@@ -111,7 +111,7 @@ export const roomRouter = createTRPCRouter({
         },
       });
 
-      return room;
+      return chat;
     }),
 
   update: protectedProcedure
@@ -120,12 +120,12 @@ export const roomRouter = createTRPCRouter({
       const { id, name } = input;
 
       await Promise.all([
-        ensureRoomExists(ctx.prisma, id),
+        ensureChatExists(ctx.prisma, id),
         ensureUserIsAdmin(ctx.prisma, ctx.session.user.id, id),
-        ensureRoomNameUnique(ctx.prisma, name, id),
+        ensureChatNameUnique(ctx.prisma, name, id),
       ]);
 
-      const room = await ctx.prisma.room.update({
+      const room = await ctx.prisma.chat.update({
         data: {
           name,
         },
@@ -143,11 +143,11 @@ export const roomRouter = createTRPCRouter({
       const { id } = input;
 
       await Promise.all([
-        ensureRoomExists(ctx.prisma, id),
+        ensureChatExists(ctx.prisma, id),
         ensureUserIsAdmin(ctx.prisma, ctx.session.user.id, id),
       ]);
 
-      const room = await ctx.prisma.room.delete({
+      const room = await ctx.prisma.chat.delete({
         where: {
           id,
         },
@@ -157,25 +157,25 @@ export const roomRouter = createTRPCRouter({
     }),
 
   join: protectedProcedure
-    .input(z.object({ roomId: z.string() }))
+    .input(z.object({ chatId: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      const { roomId } = input;
+      const { chatId } = input;
 
       await Promise.all([
-        ensureRoomExists(ctx.prisma, roomId),
-        ensureUserNotJoinedAlready(ctx.prisma, roomId, ctx.session.user.id),
+        ensureChatExists(ctx.prisma, chatId),
+        ensureUserNotJoinedAlready(ctx.prisma, chatId, ctx.session.user.id),
       ]);
 
-      const userRoom = await ctx.prisma.userRoom.create({
+      const userRoom = await ctx.prisma.userChat.create({
         data: {
           user: {
             connect: {
               id: ctx.session.user.id,
             },
           },
-          room: {
+          chat: {
             connect: {
-              id: roomId,
+              id: chatId,
             },
           },
           role: "MEMBER",
@@ -183,7 +183,7 @@ export const roomRouter = createTRPCRouter({
       });
 
       pusher
-        .trigger(`chat-${roomId}`, "new-member", ctx.session.user)
+        .trigger(`chat-${chatId}`, "new-member", ctx.session.user)
         .catch((e) => {
           throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", cause: e });
         });
@@ -196,11 +196,11 @@ export const roomRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       const { id } = input;
 
-      await ensureRoomExists(ctx.prisma, id);
+      await ensureChatExists(ctx.prisma, id);
 
       const messages = await ctx.prisma.message.findMany({
         where: {
-          roomId: id,
+          chatId: id,
         },
         include: {
           author: true,
@@ -215,9 +215,9 @@ export const roomRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       const { id } = input;
 
-      await ensureRoomExists(ctx.prisma, id);
+      await ensureChatExists(ctx.prisma, id);
 
-      const membersCount = await ctx.prisma.room.findUnique({
+      const membersCount = await ctx.prisma.chat.findUnique({
         where: {
           id,
         },
@@ -234,16 +234,18 @@ export const roomRouter = createTRPCRouter({
     }),
 
   sendMessage: protectedProcedure
-    .input(z.object({ chatId: z.string(), content: z.string().min(1) }))
+    .input(
+      z.object({ chatId: z.string(), content: z.string().min(1).max(1000) })
+    )
     .mutation(async ({ input, ctx }) => {
       const { chatId, content } = input;
 
-      await ensureRoomExists(ctx.prisma, chatId);
+      await ensureChatExists(ctx.prisma, chatId);
 
       const message = await ctx.prisma.message.create({
         data: {
           content,
-          room: {
+          chat: {
             connect: {
               id: chatId,
             },
@@ -291,12 +293,12 @@ export const roomRouter = createTRPCRouter({
       const limit = input.limit ?? 30;
       const { chatId, cursor } = input;
 
-      await ensureRoomExists(ctx.prisma, chatId);
+      await ensureChatExists(ctx.prisma, chatId);
 
       const messages = await ctx.prisma.message.findMany({
         take: limit + 1, // get an extra item at the end which we'll use as next cursor
         where: {
-          roomId: chatId,
+          chatId,
         },
         include: {
           author: true,
