@@ -61,3 +61,7 @@ Then proceed:
 ### Chat
 
 ![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/552772cd-0560-4b37-958d-a2d88fc43ccd)
+
+![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/a99f81e5-0004-42af-81fa-1bbac146f923)
+
+![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/545abf55-9b35-40b8-bcf7-8239a3b9a663)
