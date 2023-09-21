@@ -7,6 +7,7 @@ import PusherProvider from "~/provider/PusherProvider";
 import { useEffect, useState } from "react";
 import { useAppStore } from "~/store/store";
 import { THEME_GRADIENTS } from "~/const/const";
+import { Analytics } from "@vercel/analytics/react";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -33,6 +34,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
           } flex max-h-screen min-h-screen min-w-full animate-gradient overflow-hidden bg-[length:400%_400%] font-sans lg:p-8`}
         >
           <Component {...pageProps} />
+          <Analytics />
         </main>
       </PusherProvider>
     </SessionProvider>
