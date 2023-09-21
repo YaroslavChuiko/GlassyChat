@@ -56,8 +56,8 @@ Then proceed:
 
 ### Sign in
 
-![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/299cf1a2-8aae-4c68-ae25-3f0f3d7b47b2)
+![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/42fcbc77-cadb-4d88-94c0-a10716dcfa18)
 
 ### Chat
 
-![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/eb76299d-cd6e-4250-96ec-ec31280267c4)
+![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/552772cd-0560-4b37-958d-a2d88fc43ccd)
