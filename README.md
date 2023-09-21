@@ -34,7 +34,7 @@
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
-A chat application, written in Next.js, with the use of tRPC, Zustand, Radix UI, Tailwind Css, Pusher, Prisma.
+A chat application, written in Next.js, with the use of tRPC, Zustand, Radix UI, Tailwind CSS, Pusher, Prisma.
 
 ## Setup & Run
 
