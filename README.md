@@ -1,28 +1,63 @@
-# Create T3 App
+<head>
+    <div align="center">
+        <h1 align="center">Glassy Chat</h1>
+    </div>
+</head>
+
+<div align="center">
+  <img alt="nextdotjs" src="https://img.shields.io/badge/-next.js-000000.svg?style=for-the-badge&logo=nextdotjs&logoColor=white" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/-TypeScript-3178C6.svg?style=for-the-badge&logo=TypeScript&logoColor=white" />
+  <img alt="react" src="https://img.shields.io/badge/-React-61DAFB.svg?style=for-the-badge&logo=react&logoColor=black" />
+  <img alt="trpc" src="https://img.shields.io/badge/-trpc-2596BE.svg?style=for-the-badge&logo=trpc&logoColor=white" />
+  <img alt="zod" src="https://img.shields.io/badge/-zod-3E67B1.svg?style=for-the-badge&logo=zod&logoColor=white" />
+  <img alt="reactquery" src="https://img.shields.io/badge/-react%20query-FF4154.svg?style=for-the-badge&logo=reactquery&logoColor=white" />
+  <img alt="nextauth" src="https://img.shields.io/badge/-nextauth.js-000000.svg?style=for-the-badge&logo=nextdotjs&logoColor=white" />
+  <img alt="zustand" src="https://img.shields.io/badge/-zustand-252b37.svg?style=for-the-badge&logo=react&logoColor=white" />
+  <img alt="radixui" src="https://img.shields.io/badge/-radix%20UI-161618.svg?style=for-the-badge&logo=radixui&logoColor=white" />
+  <img alt="tailwindcss" src="https://img.shields.io/badge/-tailwind%20CSS-4285F4.svg?style=for-the-badge&logo=tailwindcss&logoColor=white" />
+  <img alt="pusher" src="https://img.shields.io/badge/-pusher-300D4F.svg?style=for-the-badge&logo=pusher&logoColor=white" />
+  <img alt="Prisma" src="https://img.shields.io/badge/-Prisma-2D3748.svg?style=for-the-badge&logo=prisma&logoColor=white" />
+  <img alt="mysql" src="https://img.shields.io/badge/-mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" />
+  <img alt="planetscale" src="https://img.shields.io/badge/-planetscale-000000.svg?style=for-the-badge&logo=planetscale&logoColor=white" />
+  <img alt="pwa" src="https://img.shields.io/badge/-pwa-5A0FC8.svg?style=for-the-badge&logo=pwa&logoColor=white" />
+</div>
+
+<div align="center">
+  <h3>A simple serverless chat.</h3>    
+  <p><a href="https://youtu.be/zDJ3vSZpoSA" target="_blank">Demo video</a></p>
+  <p><a href="https://webster-client-e4ded5198720.herokuapp.com/" target="_blank">Website</a></p>
+</div>
+
+<br/>
+
+## About
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
-## What's next? How do I make an app with this?
+A chat application, written in Next.js, with the use of tRPC, Zustand, Radix UI, Tailwind Css, Pusher, Prisma.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Setup & Run
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+Prior to setup, create an `.env` file based on the `.env.example`.
+Then proceed:
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+1. `npm install`
+2. Create [PlanetScale](https://planetscale.com/) MySQL database and add [connection string](https://planetscale.com/docs/concepts/connection-strings) as value for `DATABASE_URL`
+3. `npx prisma db push`
+4. Generate a secret value for `NEXTAUTH_SECRET`. You can generate a new secret on the command line with: `openssl rand -base64 32`
+5. Create a [Discord OAuth App](https://create.t3.gg/en/usage/next-auth#setting-up-the-default-discordprovider) and add values for `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET`
+6. Create a [GitHub OAuth App](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app). Make sure to set Authorization callback URL to http://localhost:3000/api/auth/callback/github. After that add values for `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`
+7. Create [Pusher account](https://pusher.com/) and add values for `PUSHER_APP_ID`, `PUSHER_APP_KEY`, `PUSHER_APP_SECRET`, `PUSHER_APP_CLUSTER`, `NEXT_PUBLIC_PUSHER_APP_KEY`, `NEXT_PUBLIC_PUSHER_APP_CLUSTER`
+8. Add values for `SUPER_ADMIN_NAME` and `SUPER_ADMIN_EMAIL`
+9. `npx prisma db seed`
+10. `npm run dev`
 
-## Learn More
+## Snapshots
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Sign in
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/299cf1a2-8aae-4c68-ae25-3f0f3d7b47b2)
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+### Chat
 
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/eb76299d-cd6e-4250-96ec-ec31280267c4)
