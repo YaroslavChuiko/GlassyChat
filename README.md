@@ -62,6 +62,12 @@ Then proceed:
 
 ![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/552772cd-0560-4b37-958d-a2d88fc43ccd)
 
+![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/9f4ce352-721f-4f7b-acb2-8671fcb7fecd)
+
 ![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/a99f81e5-0004-42af-81fa-1bbac146f923)
 
+![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/608f4ae4-bdac-4b46-918a-9d19ed5f41c4)
+
 ![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/545abf55-9b35-40b8-bcf7-8239a3b9a663)
+
+![image](https://github.com/YaroslavChuiko/GlassyChat/assets/32570823/dcc631df-0baf-4a08-afd6-b53e4ba5822c)
