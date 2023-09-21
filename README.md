@@ -16,9 +16,9 @@
   <img alt="radixui" src="https://img.shields.io/badge/-radix%20UI-161618.svg?style=for-the-badge&logo=radixui&logoColor=white" />
   <img alt="tailwindcss" src="https://img.shields.io/badge/-tailwind%20CSS-4285F4.svg?style=for-the-badge&logo=tailwindcss&logoColor=white" />
   <img alt="pusher" src="https://img.shields.io/badge/-pusher-300D4F.svg?style=for-the-badge&logo=pusher&logoColor=white" />
+  <img alt="planetscale" src="https://img.shields.io/badge/-planetscale-000000.svg?style=for-the-badge&logo=planetscale&logoColor=white" />
   <img alt="Prisma" src="https://img.shields.io/badge/-Prisma-2D3748.svg?style=for-the-badge&logo=prisma&logoColor=white" />
   <img alt="mysql" src="https://img.shields.io/badge/-mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" />
-  <img alt="planetscale" src="https://img.shields.io/badge/-planetscale-000000.svg?style=for-the-badge&logo=planetscale&logoColor=white" />
   <img alt="pwa" src="https://img.shields.io/badge/-pwa-5A0FC8.svg?style=for-the-badge&logo=pwa&logoColor=white" />
 </div>
 
